@@ -1,0 +1,261 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size:large;
+    color: white;
+    margin: 0;
+    padding: 0;
+    background-color: #303952;
+}
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+	.tasks-container, .habits-container {
+		width: 85%;
+		resize: none;
+	}
+	.listTitle {
+		display: inline-block;
+		width: 49%;
+	}
+	.listSelector {
+		color: grey;
+		display: inline-block;
+		width: 49%;
+	}
+	.listSelector:hover {
+		cursor: pointer;
+	}
+	.selectedList {
+		display:none;
+	}
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+	.tasks-container, .habits-container {
+		width: 33%;
+		resize: horizontal;
+	}
+	.listTitle {
+		display: inline-block;
+		width: 100%;
+	}
+	.listSelector {
+		display: none;
+	}
+	.selectedList {
+		display:block;
+	}
+}
+
+.container {
+    border: solid;
+    border-radius: 6%;
+}
+
+.tasks-container, .habits-container {
+    float: left;
+    margin: 20px;
+	border-color: #786fa6;
+	background-color: #574b90;
+    padding: 10px;
+    overflow: hidden;
+    text-align: center;
+}
+
+#form-container {
+	border-width: 3px;
+	border-color: #786fa6;
+	background-color: #574b90;
+	min-width: 295px;
+	width: max-content;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow:auto;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+    border: solid;
+    border-radius: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    display: flex;
+    align-items: center;
+}
+
+label > input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  margin: 4px;
+  font: inherit;
+  color: currentColor;
+  width: 1em;
+  height: 1em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  display: grid;
+  place-content: center;
+}
+
+label > input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: CanvasText;
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+label > input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+label > input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
+.checkbox-control {
+  font-family: system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+}
+
+.checkbox-control + .checkbox-control {
+  margin-top: 1em;
+}
+
+.taskname {
+	width: 100%;
+	cursor: pointer;
+}
+
+#colorPicker {
+	width: 32px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: -100;
+}
+
+li > div > span {
+	visibility: hidden;
+	cursor: pointer;
+}
+
+li:hover > div > span {
+	visibility: visible;
+}
+
+button {
+    width: 80%;
+    margin-left: 10%;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+form > textarea {
+    resize:none;
+}
+
+form > * {
+	display: block;
+	width: 100%;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+form > button {
+	width: 35%;
+	display: inline
+}
+
+input[type="text"], textarea {
+	padding: 8px;
+	padding-right: 0px;
+}
+
+.habits-container > input[type="text"], .tasks-container > input[type="text"] {
+	width: 80%
+}
+
+.sortable {
+}
+
+@keyframes fadeOutAnimation {
+  0%{
+    opacity: 1;
+    transform: rotateX(0deg);
+    height: 40px;
+  }
+  50%{
+    visibility: hidden;
+    transform: rotateX(90deg);
+  }
+  100%{
+    visibility: hidden;
+  	opacity: 0;
+    display: none;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+}
+
+@keyframes slideInAnimation {
+  0%{
+    opacity: 0;
+    top: -50%;
+  }
+  100%{
+  	opacity: 1;
+  	top: 50%;
+  }
+}
+
+.fadeOut{
+    animation-name: fadeOutAnimation;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+}
+
+.slideIn{
+    animation-name: slideInAnimation;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+.slideOut{
+    animation-name: slideInAnimation;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    animation-direction: reverse;
+}
+
+.checked {
+    opacity: .5;
+}
+
+.unchecked {
+}

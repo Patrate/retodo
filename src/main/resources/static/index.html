@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Your Web App</title>
+</head>
+<body>
+	<input type="color" id="colorPicker" oninput="setColor(this.value)" onchange="setConfig('color', this.value.slice(1))">
+	<div class="habits-container container" id="habits-container">
+	    <h2 class="listTitle">Habits</h2>
+	    <div class="listSelector" onClick="toggleSelectedList('task');"><h2>Tasks</h2></div>
+	    <input type="text" id="quickadd-habit" name="quickadd-habit">
+	    <ul id="habit-list" class="sortable"></ul>
+	    <button id="addHabitBtn" onclick="openForm('habit')">+</button>
+	</div>
+	
+	<div class="tasks-container container selectedList" id="tasks-container">
+	    <div class="listSelector" onClick="toggleSelectedList('habit');"><h2>Habits</h2></div>
+	    <h2 class="listTitle">Tasks</h2>
+	    <input type="text" id="quickadd-task" name="quickadd-task">
+	    <ul id="task-list" class="sortable"></ul>
+	    <button id="addTaskBtn" onclick="openForm('task')">+</button>
+	</div>
+
+<div id="form-container" class="form-container container">
+    <!-- Form content will be dynamically inserted here -->
+</div>
+
+<script src="app.js"></script>
+<script src="form.js"></script>
+</body>
+</html>
