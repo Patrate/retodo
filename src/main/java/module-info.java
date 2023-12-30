@@ -15,7 +15,6 @@ open module ReTodo {
 	requires spring.beans;
 	requires spring.boot.autoconfigure;
 	requires spring.boot;
-	requires quartz;
 	requires spring.core;
 	requires com.fasterxml.jackson.databind;
 }
