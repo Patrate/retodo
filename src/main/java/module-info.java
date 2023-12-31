@@ -17,4 +17,6 @@ open module ReTodo {
 	requires spring.boot;
 	requires spring.core;
 	requires com.fasterxml.jackson.databind;
+	requires spring.webmvc;
+	requires org.apache.tomcat.embed.core;
 }
