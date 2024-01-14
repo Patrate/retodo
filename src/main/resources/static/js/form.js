@@ -28,13 +28,13 @@ function openForm(type, preFilledData = null) {
                 	</div>`
                 ).join('') : ''}
             </ul>
-			<br>--><!--
+			<br>-->
 			<div>
             	<label for="reminder">Reminder:</label>
-            	<input type="checkbox" id="reminder-check" name="reminder-check" ${(preFilledData && preFilledData.reminder != null) ? "checked" : ""}/>
+            	<input type="checkbox" id="reminder-check" onChange="toggleVisibility('reminder-input', this.checked);" name="reminder-check" ${(preFilledData && preFilledData.reminder != null) ? "checked" : ""}/>
             </div>
-            <input type="datetime-local" id="reminder" name="reminder" value="${preFilledData ? new Date(preFilledData.reminder).toISOString().substring(0,19) : TODAY.toISOString().substring(0,19)}">
-	        <br>-->
+            <input type="datetime-local" id="reminder-input" name="reminder" value="${preFilledData ? new Date(preFilledData.reminder).toISOString().substring(0,19) : TODAY.toISOString().substring(0,19)}" ${(preFilledData && preFilledData.reminder != null) ? "" : 'style="display:none;"'}>
+	        <br>
             ${type === 'task' ? `
 				<div>
 	                <label for="dueDate">Due Date:</label>
@@ -52,27 +52,27 @@ function openForm(type, preFilledData = null) {
 					<div>
 						<input type="radio" id="dayFrequency-radio" name="frequencyType" onclick="selectDivFrequency('dayFrequency')"
 							value="DAILY" ${preFilledData && preFilledData.frequencyType == "DAILY" ? "checked" : ""}/>
-	    				<label for="dayFrequency-radio">Every X days</label>
-	  				</div>
-					<div>
-						<input type="radio" id="dayOfMonth-radio" name="frequencyType" onclick="selectDivFrequency('dayOfMonth')"
-							value="MONTHLY" ${preFilledData && preFilledData.frequencyType == "MONTHLY" ? "checked" : ""}/>
-	    				<label for="dayOfMonth-radio">Every month the 3rd</label>
+	    				<label for="dayFrequency-radio">Daily</label>
 	  				</div>
 	  				<div>
 						<input type="radio" id="dayOfWeek-radio" name="frequencyType" onclick="selectDivFrequency('dayOfWeek')"
 							value="DAYOFWEEK" ${preFilledData && preFilledData.frequencyType == "DAYOFWEEK" ? "checked" : ""}/>
-	    				<label for="dayOfWeek-radio">Every monday and wednesday</label>
+	    				<label for="dayOfWeek-radio">Weekly</label>
 	  				</div>
-	  				<div id="frequencyData">
+					<div>
+						<input type="radio" id="dayOfMonth-radio" name="frequencyType" onclick="selectDivFrequency('dayOfMonth')"
+							value="MONTHLY" ${preFilledData && preFilledData.frequencyType == "MONTHLY" ? "checked" : ""}/>
+	    				<label for="dayOfMonth-radio">Monthly</label>
+	  				</div>
+	  				<div>
 	  					<div class="frequencyDiv" id="dayFrequency" ${preFilledData && preFilledData.frequencyType == "DAILY" ? "" : 'style="display:none;"'}>
-	  						A positive int input for days freq and a time input for time of reset
+	  						<input type="number" min="1" id="frequencyData" name="frequencyData" value="${preFilledData.frequencyData}" title="Every X days"/>
 	  					</div>
 	  					<div class="frequencyDiv" id="dayOfMonth" ${preFilledData && preFilledData.frequencyType == "MONTHLY" ? "" : 'style="display:none;"'}>
-	  						An input to choose which day of the month
+	  						<input type="text" id="frequencyData" name="frequencyData" placeholder="1,15,29" value="${preFilledData.frequencyData}" title="day(s) of month to reset separated by comma"/>
 	  					</div>
 	  					<div class="frequencyDiv" id="dayOfWeek" ${preFilledData && preFilledData.frequencyType == "DAYOFWEEK" ? "" : 'style="display:none;"'}>
-	  						An input to choose which days of the week
+	  						<input type="text" id="frequencyData" name="frequencyData" placeholder="1,3,5,7" value="${preFilledData.frequencyData}" title="day(s) of week to reset (1. monday to 7. sunday)"/>
 	  					</div>
 	  				</div>
 				</div>
@@ -103,6 +103,10 @@ function selectDivFrequency(div) {
 		else
 			el.style.display = "none";
 	}
+}
+
+function toggleVisibility(elName, state) {
+	document.getElementById(elName).style.display = state ? "block" : "none";
 }
 
 function closeForm() {

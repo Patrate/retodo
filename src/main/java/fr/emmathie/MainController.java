@@ -1,8 +1,16 @@
 package fr.emmathie;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +87,8 @@ public class MainController implements InitializingBean {
 			} else {
 				return new ResponseEntity<String>("Neither an habit or a task ???", HttpStatus.BAD_REQUEST);
 			}
+			System.out.println("Other: " + other);
+			System.out.println(body);
 			at.merge(other);
 			String json;
 			try {
@@ -161,11 +171,12 @@ public class MainController implements InitializingBean {
 		taskRepository.deleteById(id);
 		return new ResponseEntity<String>("deleted task " + id, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(path = "/config")
 	public @ResponseBody Iterable<Config> getConfig() {
 		return configRepository.findAll();
 	}
+
 	@PutMapping(path = "/config")
 	public @ResponseBody ResponseEntity<String> setConfig(@RequestParam String key, @RequestParam String value) {
 		Config c = configRepository.findById(key).orElse(new Config(key, null));
@@ -178,13 +189,31 @@ public class MainController implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// Initializing default config
-		for(DConfig dc:DConfig.values()) {
-			if(!configRepository.existsById(dc.key)) {
+		for (DConfig dc : DConfig.values()) {
+			if (!configRepository.existsById(dc.key)) {
 				Config c = new Config(dc.key, dc.value);
 				configRepository.save(c);
 			}
 		}
-		// Starting the schedules for notification and habits
-		// TODO
+		startExecutors();
+	}
+
+	private void startExecutors() {
+		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		// TODO use a config value for daily reset time
+		Long execTime = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay().withHour(6),
+				ChronoUnit.MINUTES);
+		executor.scheduleAtFixedRate(new DailyTask(), execTime, TimeUnit.DAYS.toMinutes(1), TimeUnit.MINUTES);
+	}
+
+	private class DailyTask extends TimerTask {
+		@Override
+		public void run() {
+			for (AbstractTask at : taskRepository.findAll()) {
+				if (at instanceof Habit) {
+					((Habit) at).dailyReset();
+				}
+			}
+		}
 	}
 }
